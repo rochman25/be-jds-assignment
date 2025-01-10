@@ -1,8 +1,10 @@
 package http
 
 import (
+	config "auth-service/pkg"
 	"auth-service/src/factory"
 	"auth-service/src/middleware"
+	"auth-service/util"
 	"github.com/gin-gonic/gin"
 	"net/http"
 )
@@ -13,6 +15,8 @@ func NewHttp(g *gin.Engine, f *factory.Factory) {
 
 	g.Use(gin.Logger())
 	g.Use(gin.Recovery())
+
+	util.Index(g, config.AppName(), config.AppVersion())
 
 	//override response when route not found
 	g.NoRoute(func(c *gin.Context) {

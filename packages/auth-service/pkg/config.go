@@ -17,21 +17,21 @@ func LoadEnv(path string) {
 }
 
 func AppVersion() string {
-	return viper.GetString("APP_VERSION")
-}
-
-func ApiSecretKey() string {
-	return viper.GetString("API_KEY_SECRET")
+	return viper.GetString("APP_AUTH_VERSION")
 }
 
 func AppPort() int {
-	return viper.GetInt("APP_PORT")
+	return viper.GetInt("APP_AUTH_PORT")
 }
 
 func AppEnv() string {
-	return viper.GetString("APP_ENV")
+	return viper.GetString("APP_AUTH_ENV")
 }
 
 func AppHost() string {
-	return viper.GetString("APP_HOST")
+	return viper.GetString("APP_AUTH_HOST")
+}
+
+func AppName() string {
+	return viper.GetString("APP_AUTH_NAME")
 }

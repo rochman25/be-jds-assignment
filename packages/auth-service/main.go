@@ -14,7 +14,7 @@ import (
 
 func main() {
 	ctx := context.Background()
-	config.LoadEnv(".env")
+	config.LoadEnv("../../.env")
 	rootCmd := &cobra.Command{}
 
 	// define rest command
