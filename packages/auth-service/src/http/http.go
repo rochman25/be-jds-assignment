@@ -2,6 +2,7 @@ package http
 
 import (
 	config "auth-service/pkg"
+	"auth-service/src/app/auth"
 	"auth-service/src/factory"
 	"auth-service/src/middleware"
 	"auth-service/util"
@@ -18,6 +19,8 @@ func NewHttp(g *gin.Engine, f *factory.Factory) {
 
 	util.Index(g, config.AppName(), config.AppVersion())
 
+	v1 := g.Group("/api/v1")
+	auth.NewHandler(f).Router(v1.Group("/auth"))
 	//override response when route not found
 	g.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, nil)
