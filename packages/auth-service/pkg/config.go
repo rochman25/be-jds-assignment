@@ -35,3 +35,7 @@ func AppHost() string {
 func AppName() string {
 	return viper.GetString("APP_AUTH_NAME")
 }
+
+func AppLoginExpirationDuration() string { return viper.GetString("JWT_EXPIRATION_DURATION") }
+
+func AppJwtSignatureKey() string { return viper.GetString("JWT_SIGNATURE_KEY") }

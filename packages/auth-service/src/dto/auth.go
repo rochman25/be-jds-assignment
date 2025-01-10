@@ -11,4 +11,16 @@ type (
 		Role     string `json:"role"`
 		Password string `json:"password"`
 	}
+
+	LoginRequest struct {
+		Nik      string `json:"nik" binding:"required,min=16,max=16"`
+		Password string `json:"password" binding:"required,min=6,max=6"`
+	}
+
+	LoginResponse struct {
+		ID          int    `json:"id"`
+		Nik         string `json:"nik"`
+		Role        string `json:"role"`
+		AccessToken string `json:"access_token"`
+	}
 )

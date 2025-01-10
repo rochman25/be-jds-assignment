@@ -7,8 +7,6 @@ import (
 	"auth-service/src/repository"
 	"auth-service/util"
 	"context"
-	"crypto/rand"
-	"math/big"
 	"strings"
 )
 
@@ -18,6 +16,7 @@ type service struct {
 
 type Service interface {
 	RegisterService(ctx context.Context, payload dto.RegisterRequest) (res *dto.RegisterResponse, err error)
+	LoginService(ctx context.Context, payload dto.LoginRequest) (res *dto.LoginResponse, err error)
 }
 
 func NewService(f *factory.Factory) Service {
@@ -37,7 +36,7 @@ func (s service) RegisterService(ctx context.Context, payload dto.RegisterReques
 		return nil, util.NIKALREADYEXIST
 	}
 	//generate password
-	plainPassword, err := generatePassword(6)
+	plainPassword, err := util.GeneratePassword(6)
 	if err != nil {
 		return nil, err
 	}
@@ -66,16 +65,34 @@ func (s service) RegisterService(ctx context.Context, payload dto.RegisterReques
 	return res, nil
 }
 
-// generatePassword generates a random alphanumeric password
-func generatePassword(length int) (string, error) {
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-	password := make([]byte, length)
-	for i := range password {
-		num, err := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
-		if err != nil {
-			return "", err
-		}
-		password[i] = charset[num.Int64()]
+func (s service) LoginService(ctx context.Context, payload dto.LoginRequest) (res *dto.LoginResponse, err error) {
+	//get user by nik
+	user, err := s.UserRepository.FindOne(ctx, "id,nik,role,password", "nik = ?", payload.Nik)
+	if err != nil {
+		return nil, err
 	}
-	return string(password), nil
+	//check if nik exist
+	if user.Id == 0 {
+		return nil, util.NIKNOTFOUND
+	}
+	//validate password
+	checkPass := util.CheckHashPassword(payload.Password, user.Password)
+	if !checkPass {
+		return nil, util.PASSWORDWRONG
+	}
+	//generate access token
+	accessToken, err := util.CreateAccessToken(user.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	response := dto.LoginResponse{
+		ID:          user.Id,
+		Nik:         user.Nik,
+		Role:        user.Role,
+		AccessToken: *accessToken,
+	}
+
+	res = &response
+	return res, nil
 }
