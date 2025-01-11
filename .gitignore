@@ -1,6 +1,6 @@
 .env
 packages/business-service/node_modules
 packages/business-service/package-lock.json
-.idea
+packages/auth-service/.idea
 
 
