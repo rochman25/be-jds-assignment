@@ -6,4 +6,5 @@ var (
 	NIKALREADYEXIST = errors.New("NIK Already Exist")
 	NIKNOTFOUND     = errors.New("NIK not found")
 	PASSWORDWRONG   = errors.New("Wrong Password")
+	TOKENINVALID    = errors.New("Token Invalid")
 )

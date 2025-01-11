@@ -2,6 +2,7 @@ package util
 
 import (
 	config "auth-service/pkg"
+	"auth-service/src/dto"
 	"github.com/golang-jwt/jwt/v5"
 	"strconv"
 	"time"
@@ -12,10 +13,12 @@ func CreateAccessToken(UserId int) (token *string, err error) {
 	loginExpDur, err := strconv.Atoi(loginExpDurStr)
 	loginExpirationDuration := time.Now().Add(time.Duration(loginExpDur) * time.Minute)
 
-	claims := jwt.RegisteredClaims{
-		Issuer:    config.AppName(),
-		ExpiresAt: jwt.NewNumericDate(loginExpirationDuration),
-		ID:        strconv.Itoa(UserId),
+	claims := dto.ClaimAuthData{
+		UserId,
+		jwt.RegisteredClaims{
+			Issuer:    config.AppName(),
+			ExpiresAt: jwt.NewNumericDate(loginExpirationDuration),
+		},
 	}
 
 	tokenJwt := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
@@ -26,4 +29,27 @@ func CreateAccessToken(UserId int) (token *string, err error) {
 	}
 	token = &tokenString
 	return token, nil
+}
+
+func ParseAccessToken(token string) (res *dto.ClaimAuthData, err error) {
+	var jwtKey = []byte(config.AppJwtSignatureKey())
+	tokenParsed, err := jwt.ParseWithClaims(token, &dto.ClaimAuthData{}, func(token *jwt.Token) (interface{}, error) {
+		if method, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
+			return nil, TOKENINVALID
+		} else if method != jwt.SigningMethodHS256 {
+			return nil, TOKENINVALID
+		}
+
+		return jwtKey, nil
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	claims, ok := tokenParsed.Claims.(*dto.ClaimAuthData)
+	if !ok {
+		return nil, TOKENINVALID
+	}
+	res = claims
+	return res, nil
 }

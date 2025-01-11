@@ -11,4 +11,5 @@ var MAPERROR = map[error]int{
 	NIKALREADYEXIST: http.StatusBadRequest,
 	NIKNOTFOUND:     http.StatusBadRequest,
 	PASSWORDWRONG:   http.StatusBadRequest,
+	TOKENINVALID:    http.StatusUnauthorized,
 }
