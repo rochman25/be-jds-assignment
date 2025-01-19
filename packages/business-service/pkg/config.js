@@ -27,11 +27,26 @@ const getAppName = () => {
     return getEnvVariable('APP_BUSINESS_NAME');
 };
 
+const getJwtSecret = () => {
+    return getEnvVariable('JWT_SIGNATURE_KEY');
+};
+
+const getJwtExpiration = () => {
+    return getEnvVariable('JWT_EXPIRATION_DURATION');
+};
+
+const vatRatesUrl = () => {
+    return getEnvVariable('VAT_RATES_URL');
+}
+
 module.exports = {
     getEnvVariable,
     getApphost,
     getAppPort,
     getAppName,
     getAppEnv,
-    getAppVersion
+    getAppVersion,
+    getJwtSecret,
+    getJwtExpiration,
+    vatRatesUrl,
 };
