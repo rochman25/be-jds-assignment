@@ -39,6 +39,10 @@ const vatRatesUrl = () => {
     return getEnvVariable('VAT_RATES_URL');
 }
 
+const productSourceUrl = () => {
+    return getEnvVariable('JDS_PRODUCT_URL');
+}
+
 module.exports = {
     getEnvVariable,
     getApphost,
@@ -49,4 +53,5 @@ module.exports = {
     getJwtSecret,
     getJwtExpiration,
     vatRatesUrl,
+    productSourceUrl,
 };

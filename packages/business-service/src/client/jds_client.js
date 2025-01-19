@@ -1,11 +1,12 @@
 const axios = require('axios');
 const Product = require('../dto/products');
+const config = require('../../pkg/config');
 
 // Service Function
 const fetchAndMapProducts = async () => {
     try {
       // Fetch API Data
-      const response = await axios.get("https://60c18de74f7e880017dbfd51.mockapi.io/api/v1/jabar-digital-services/product"); // Replace with your API URL
+      const response = await axios.get(config.productSourceUrl());
       const data = response.data;
   
       // Map to DTO
