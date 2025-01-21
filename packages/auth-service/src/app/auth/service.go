@@ -81,7 +81,7 @@ func (s service) LoginService(ctx context.Context, payload dto.LoginRequest) (re
 		return nil, util.PASSWORDWRONG
 	}
 	//generate access token
-	accessToken, err := util.CreateAccessToken(user.Id)
+	accessToken, err := util.CreateAccessToken(user.Id, user.Role)
 	if err != nil {
 		return nil, err
 	}

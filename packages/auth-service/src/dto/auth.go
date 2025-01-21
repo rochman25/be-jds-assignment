@@ -27,7 +27,8 @@ type (
 	}
 
 	ClaimAuthData struct {
-		UserId int `json:"user_id"`
+		UserId int    `json:"user_id"`
+		Role   string `json:"role"`
 		jwt.RegisteredClaims
 	}
 )

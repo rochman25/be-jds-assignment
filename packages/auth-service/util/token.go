@@ -8,13 +8,14 @@ import (
 	"time"
 )
 
-func CreateAccessToken(UserId int) (token *string, err error) {
+func CreateAccessToken(UserId int, Role string) (token *string, err error) {
 	loginExpDurStr := config.AppLoginExpirationDuration()
 	loginExpDur, err := strconv.Atoi(loginExpDurStr)
 	loginExpirationDuration := time.Now().Add(time.Duration(loginExpDur) * time.Minute)
 
 	claims := dto.ClaimAuthData{
 		UserId,
+		Role,
 		jwt.RegisteredClaims{
 			Issuer:    config.AppName(),
 			ExpiresAt: jwt.NewNumericDate(loginExpirationDuration),
