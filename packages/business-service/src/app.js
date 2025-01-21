@@ -3,8 +3,9 @@ const config = require('../pkg/config');
 const Jwt = require('@hapi/jwt');
 
 const product = require('./app/products');
-
 const ProductService = require('./services/product/productService');
+
+const auth = require('./app/auth');
 
 // redis
 const RedisService = require('./services/redis/redisService');
@@ -92,6 +93,9 @@ const init = async () => {
             options: {
                 service: productService,
             }
+        },
+        {
+            plugin: auth,
         }
     ]);
 
