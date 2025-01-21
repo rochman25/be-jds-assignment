@@ -43,6 +43,26 @@ const productSourceUrl = () => {
     return getEnvVariable('JDS_PRODUCT_URL');
 }
 
+const redisHost = () => {
+    return getEnvVariable('REDIS_HOST');
+};
+
+const redisUsername = () => {
+    return getEnvVariable('REDIS_USERNAME');
+};
+
+const redisPassword = () => {
+    return getEnvVariable('REDIS_PASSWORD');
+};
+
+const jwtSignatureKey = () => {
+    return getEnvVariable('JWT_SIGNATURE_KEY');
+}
+
+const jwtExpirationDuration = () => {
+    return getEnvVariable('JWT_EXPIRATION_DURATION');
+}
+
 module.exports = {
     getEnvVariable,
     getApphost,
@@ -54,4 +74,9 @@ module.exports = {
     getJwtExpiration,
     vatRatesUrl,
     productSourceUrl,
+    redisHost, 
+    redisUsername,
+    redisPassword,
+    jwtSignatureKey,
+    jwtExpirationDuration,
 };
