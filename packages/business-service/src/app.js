@@ -44,6 +44,36 @@ const init = async () => {
         }),
     });
 
+    server.auth.strategy('admin_business_service', 'jwt', {
+        keys: config.jwtSignatureKey(),
+        verify: {
+            aud: false,
+            iss: false,
+            sub: false,
+            maxAgeSec: (config.jwtExpirationDuration() * 60),
+        },
+        validate: (artifacts) => {
+            const payload = artifacts.decoded.payload;
+
+            // Check if the role exists and is 'admin'
+            if (payload.role && payload.role === 'admin') {
+                return {
+                    isValid: true,
+                    credentials: {
+                        id: payload.user_id,
+                        role: payload.role,
+                    },
+                };
+            }
+
+            // If the role is not 'admin', reject the token
+            return {
+                isValid: false,
+                credentials: null,
+            };
+        },
+    });
+
     // Add a global error handler
     server.ext('onPreResponse', (request, h) => {
         const response = request.response;
@@ -61,9 +91,9 @@ const init = async () => {
                         error_message: ['Authentication token is invalid.'],
                     }
                     break;
-                case 'Token expired':  
+                case 'Token expired':
                     response.output.payload = {
-                        error_message: ['Authentication token has expired.'],   
+                        error_message: ['Authentication token has expired.'],
                     }
                     break;
                 default:
