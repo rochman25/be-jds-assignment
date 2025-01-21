@@ -18,6 +18,7 @@ func CreateAccessToken(UserId int) (token *string, err error) {
 		jwt.RegisteredClaims{
 			Issuer:    config.AppName(),
 			ExpiresAt: jwt.NewNumericDate(loginExpirationDuration),
+			IssuedAt:  jwt.NewNumericDate(time.Now()),
 		},
 	}
 
